@@ -1,17 +1,19 @@
-
+import os
 
 def checkGridSize(input_list):
     if len(input_list) < 2:
-        print("Insufficient information received. Please send new instructions.")
+        exit("Cannot define plateau. Please send new instructions.")
     elif len(input_list) > 2:
         print("Too much info received, ignoring excess info.")
 
     passed_check = []
+    #check and see if the plateau coordinates are numbers 
     if not input_list[0].isnumeric() or not input_list[1].isnumeric():
-        print("Invalid initial coordinates")
+        exit("Invalid plateau dimensions. Please send new instructions.")
     else:
         passed_check.append(int(input_list[0]))
         passed_check.append(int(input_list[1]))
+    
     
     return passed_check
 
@@ -19,9 +21,11 @@ def checkInitialCoordinates(input_list):
     # check the number of arguments
     passed_check = []
     if len(input_list) != 3:
-        print('Invalid number of inputs. Please send new instructions.')
+        print("Invalid number of rover inputs. Please send new instructions.")
+        
     
     # check that the coordinate arguments are numeric
+    # there is the case that this could be invalid for the first rover, need to handle this exception
     if not input_list[0].isnumeric() or not input_list[1].isnumeric():
         print("Invalid initial coordinates")
     else:
@@ -41,6 +45,11 @@ def checkInitialCoordinates(input_list):
 
 #This script validates the input before passing it off to the other functions and objects
 def parseInstructions(file):
+    #determine if the file is a valid file type
+    ext = os.path.splitext(file)[1]
+    if ext != '.txt':
+        exit("Invalid file type. Please send new instructions.")
+
     # read in the text file line by line
     f = open(file, "r").readlines()
     
@@ -49,6 +58,7 @@ def parseInstructions(file):
         print("Insufficient information received. Please send new instructions.")
     elif len(f) > 5:
         print("Too much info received, ignoring excess info.")
+        
     #remove the newline characters and split the string up into a list
     clean_inputs = []
     for line in f:
