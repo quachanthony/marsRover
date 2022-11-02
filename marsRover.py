@@ -1,28 +1,18 @@
-#test case:
-# 5 5
-# 1 2 N
-# LMLMLMLMM
-
+from contextlib import suppress
+from dis import Instruction
 from rover import*
 from inputParser import*
 import sys
-    
-def executeInstructions(rover, instructions):
-    
-    for i in instructions:
-        if i == "L" or i == "l":
-            rover.turnLeft()
-        elif i == "R" or i == "r":
-            rover.turnRight()
-        elif i == "M" or i == "m":
-            rover.moveForward()
-        else: # the rover will ignore any invalid commands 
-            pass
-    
 
-def main():
-    
-    instructions = parseInstructions(sys.argv[1])
+
+
+def marsRover(input_file):
+
+    instructions = parseInstructions(input_file)
+    #default outputs for rover position for unit testing
+    r1Position = None
+    r2Position = None
+
     boundary = instructions[0]
 
     #There is a scenario where the inputs for the first rover are invalid and we need to skip
@@ -34,25 +24,36 @@ def main():
     R2_start = instructions[3]
     R2_instructions = instructions[4]
 
+    
+
     #since the rovers move sequentially, there is the scenario where the first rover can't move,
     #but the second one can. We can catch this exception in a try/except
     try:
-        rover1 = Rover("Spirit", R1_start, boundary)
-        executeInstructions(rover1, R1_instructions)
+        rover1 = Rover("Spirit", R1_start, boundary, R1_instructions)
+        rover1.executeInstructions()
         print(rover1.returnFinalPosition())
+        r1Position = rover1.returnFinalPosition()
 
-        rover2 = Rover("Opportunity", R2_start, boundary)
-        executeInstructions(rover2, R2_instructions)
+        rover2 = Rover("Opportunity", R2_start, boundary, R2_instructions)
+        rover2.executeInstructions()
         print(rover2.returnFinalPosition())
+        r2Position = rover2.returnFinalPosition()
+
     except:
-        rover2 = Rover("Opportunity", R2_start, boundary)
-        executeInstructions(rover2, R2_instructions)
-        print(rover2.returnFinalPosition())
+        with suppress(IndexError):
+            rover2 = Rover("Opportunity", R2_start, boundary, R2_instructions)
+            rover2.executeInstructions()
+            print(rover2.returnFinalPosition())
+            r2Position = rover2.returnFinalPosition()
 
-    
-    
-    
-    
+    return r1Position, r2Position
+
+def main():
+    try:
+        instructions = sys.argv[1]
+        marsRover(instructions)
+    except:
+        pass
 
 if __name__=="__main__":
     main()

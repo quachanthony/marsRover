@@ -1,15 +1,16 @@
 import os
 
 def checkGridSize(input_list):
+    passed_check = []
     if len(input_list) < 2:
-        exit("Cannot define plateau. Please send new instructions.")
+        print("Cannot define plateau. Please send new instructions.")
+        return passed_check
     elif len(input_list) > 2:
         print("Too much info received, ignoring excess info.")
 
-    passed_check = []
     #check and see if the plateau coordinates are numbers 
     if not input_list[0].isnumeric() or not input_list[1].isnumeric():
-        exit("Invalid plateau dimensions. Please send new instructions.")
+        print("Invalid plateau dimensions. Please send new instructions.")
     else:
         passed_check.append(int(input_list[0]))
         passed_check.append(int(input_list[1]))
@@ -20,14 +21,15 @@ def checkGridSize(input_list):
 def checkInitialCoordinates(input_list):
     # check the number of arguments
     passed_check = []
-    if len(input_list) != 3:
+    if len(input_list) < 3:
         print("Invalid number of rover inputs. Please send new instructions.")
-        
-    
+        return passed_check
     # check that the coordinate arguments are numeric
     # there is the case that this could be invalid for the first rover, need to handle this exception
-    if not input_list[0].isnumeric() or not input_list[1].isnumeric():
+    elif not input_list[0].isnumeric() or not input_list[1].isnumeric():
         print("Invalid initial coordinates")
+        return passed_check
+
     else:
         passed_check.append(int(input_list[0]))
         passed_check.append(int(input_list[1]))
@@ -48,7 +50,9 @@ def parseInstructions(file):
     #determine if the file is a valid file type
     ext = os.path.splitext(file)[1]
     if ext != '.txt':
-        exit("Invalid file type. Please send new instructions.")
+        print("Invalid file type. Please send new instructions.")
+        #so we can catch this in a try block later
+        
 
     # read in the text file line by line
     f = open(file, "r").readlines()
@@ -56,15 +60,19 @@ def parseInstructions(file):
     #check to see if there are the correct lines in the text file
     if len(f) < 5:
         print("Insufficient information received. Please send new instructions.")
+        # raise IndexError
     elif len(f) > 5:
         print("Too much info received, ignoring excess info.")
-        
+
     #remove the newline characters and split the string up into a list
     clean_inputs = []
     for line in f:
         # it is possible that there could be empty lines in between valid lines
-         if line not in ['\n', '\r', '\r\n']: 
-            clean_inputs.append(line.strip().split(" "))
+         if line not in ['\n', '\r', '\r\n', '\s']: 
+            # clean_inputs.append(line.strip().split(" "))
+            clean = line.strip().split(" ")
+            clean = list(filter(('').__ne__, clean))
+            clean_inputs.append(clean)
 
     #all of these inputs are strings and we need some of them to be numbers
     gridArea = clean_inputs[0]
