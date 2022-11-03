@@ -1,7 +1,0 @@
-ASSUMPTIONS
-
-1. The two rovers are allowed to occupy the same space (Mars is a big planet)
-2. If the rover is about to come off the grid, we should stop it from doing that, assuming that 
-   the grid is a safe area for the rover to explore
-3. The starting position of the rover needs to be within the grid, if it is not that is an invalid use case
-4. Inputs are expected to be in upper case, but if it is not, the program will still accept it

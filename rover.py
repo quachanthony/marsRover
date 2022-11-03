@@ -20,7 +20,16 @@ class Rover(object):
         self.x_bound = boundary[0]
         self.y_bound = boundary[1]
         self.instructions = instructions
-        
+        self.checkInBounds()
+
+    def checkInBounds(self):
+        if self.x > self.x_bound:
+            print("X coordinate is out of bounds")
+            self.x = None
+        if self.y > self.y_bound:
+            print("Y coordinate is out of bounds")
+            self.y = None
+
     def turnLeft(self):
         """
         @desc - class method for Rover that changes the heading to the Left based on the instructions. It is a setter
@@ -117,7 +126,7 @@ class Rover(object):
                 self.turnRight()
             elif i == "M" or i == "m":
                 self.moveForward()
-            else: # the rover will ignore any invalid commands 
+            else: # the rover will ignore any invalid commands and remain where it is
                 pass
 
     
