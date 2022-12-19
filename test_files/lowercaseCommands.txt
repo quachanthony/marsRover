@@ -1,0 +1,5 @@
+5 5
+1 2 N
+lmlmlmlmm
+3 3 E
+mmrmmrmrrm
